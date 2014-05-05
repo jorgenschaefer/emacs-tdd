@@ -35,6 +35,8 @@
 
 ;;; Code:
 
+(require 'compile)
+
 (defgroup tdd nil
   "Test-Driven Development Indicator."
   :prefix "tdd-"
@@ -51,7 +53,7 @@
   :type 'string
   :group 'tdd)
 
-(defcustom tdd-success-face 'success
+(defcustom tdd-success-face 'compilation-mode-line-exit
   "Face to use for `tdd-success-symbol'."
   :type 'face
   :group 'tdd)
@@ -61,7 +63,7 @@
   :type 'string
   :group 'tdd)
 
-(defcustom tdd-failure-face 'error
+(defcustom tdd-failure-face 'compilation-mode-line-fail
   "Face to use for `tdd-failure-symbol'."
   :type 'face
   :group 'tdd)
@@ -71,7 +73,7 @@
   :type 'string
   :group 'tdd)
 
-(defcustom tdd-waiting-face nil
+(defcustom tdd-waiting-face 'compilation-mode-line-run
   "Face to use for `tdd-waiting-symbol'."
   :type 'face
   :group 'tdd)
