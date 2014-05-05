@@ -89,6 +89,7 @@
 Sadly, `get-buffer-process' does not work for preventing
 duplicate compilation runs.")
 
+;;;###autoload
 (define-minor-mode tdd-mode
   "Test-driven development global minor mode.
 
