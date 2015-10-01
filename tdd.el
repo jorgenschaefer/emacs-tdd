@@ -1,4 +1,4 @@
-;;; tdd.el --- recompile on save and indicate success in the mode line
+;;; tdd.el --- run tests on save and indicate success in the mode line
 
 ;; Copyright (C) 2014  Jorgen Schaefer <contact@jorgenschaefer.de>
 
@@ -23,8 +23,8 @@
 ;;; Commentary:
 
 ;; After enabling `tdd-mode', any command to save a file will run
-;; `recompile' in the background. The mode line shows the status of
-;; the last compilation process.
+;; `recompile' (or a customisable function) in the background. The
+;; mode line shows the status of the last compilation process.
 
 ;; This is meant to be used with test-driven development:
 
@@ -47,6 +47,17 @@
                               'tdd-display-buffer)
                             map)
   "Keymap used on the mode line indicator.")
+
+(defcustom tdd-test-function #'recompile
+  "Test function to run.
+
+It will be run without arguments, whenever a buffer is saved. It
+should run in compilation major mode, because checking for
+success or failure depends the mode hooks.
+
+The default is (recompile)"
+  :type 'function
+  :group 'tdd)
 
 (defcustom tdd-success-symbol "✔"
   "Mode line symbol to show when tests passed."
@@ -93,9 +104,9 @@ duplicate compilation runs.")
 (define-minor-mode tdd-mode
   "Test-driven development global minor mode.
 
-Runs `recompile' every time a buffer is saved, and adjusts a mode
-line indicator depending on the success or failure of that
-compilation command."
+Runs `tdd-test-function' every time a buffer is saved, and
+adjusts a mode line indicator depending on the success or failure
+of that compilation command."
   :global t
   (cond
    (tdd-mode
@@ -177,7 +188,7 @@ compilation command."
     (let ((compilation-ask-about-save nil)
           (compilation-save-buffers-predicate (lambda () nil)))
       (save-window-excursion
-        (recompile)))))
+        (funcall tdd-test-function)))))
 
 (defun tdd-compilation-start (proc)
   "Function run from `compilation-start-hook'."
